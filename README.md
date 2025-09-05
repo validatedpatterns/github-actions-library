@@ -13,11 +13,15 @@ Runs [GitHub Super-Linter](https://github.com/super-linter/super-linter) to vali
 #### Usage
 
 **Basic usage:**
+
 ```yaml
 name: Lint Code Base
 on:
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   lint:
@@ -25,18 +29,21 @@ jobs:
 ```
 
 **With custom configuration:**
+
 ```yaml
 name: Lint Code Base
 on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     uses: validatedpatterns/github-actions-library/.github/workflows/superlinter.yml@v1
     with:
       runner: ubuntu-22.04
-      sl_version: slim-v7
       sl_env: |
         VALIDATE_ALL_CODEBASE=false
         VALIDATE_MARKDOWN=false
@@ -46,11 +53,10 @@ jobs:
 
 #### Inputs
 
-| Input        | Description                                                   | Required | Default         |
-| ------------ | ------------------------------------------------------------- | -------- | --------------- |
-| `runner`     | GitHub runner to use                                          | No       | `ubuntu-latest` |
-| `sl_version` | GitHub Super-Linter version ref                               | No       | `slim-v8`       |
-| `sl_env`     | Extra Super-Linter environment variables (lines of KEY=VALUE) | No       | `""`            |
+| Input    | Description                                                   | Required | Default         |
+| -------- | ------------------------------------------------------------- | -------- | --------------- |
+| `runner` | GitHub runner to use                                          | No       | `ubuntu-latest` |
+| `sl_env` | Extra Super-Linter environment variables (lines of KEY=VALUE) | No       | `""`            |
 
 #### Secrets
 
@@ -65,8 +71,8 @@ The workflow supports all Super-Linter configuration options through the `sl_env
 #### Permissions
 
 The workflow requires the following permissions:
+
 - `contents: read` - To checkout the repository
-- `pull-requests: read` - To read pull request information
 
 These permissions are automatically set by the workflow and don't need to be configured in the calling workflow.
 
@@ -81,4 +87,4 @@ These permissions are automatically set by the workflow and don't need to be con
 When adding new workflows:
 
 1. Add the workflow YAML file to `.github/workflows/`
-2. Update this main README with full documentation including usage, inputs, and examples
+2. Update this readme with full documentation including usage, inputs, and examples

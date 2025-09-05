@@ -1,0 +1,8 @@
+name: Self Lint
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    uses: validatedpatterns/github-actions-library/.github/workflows/superlinter/superlinter.yml@v1

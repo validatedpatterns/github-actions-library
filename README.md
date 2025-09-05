@@ -87,4 +87,4 @@ These permissions are automatically set by the workflow and don't need to be con
 When adding new workflows:
 
 1. Add the workflow YAML file to `.github/workflows/`
-2. Update this readme with full documentation including usage, inputs, and examples
+2. Update this README with full documentation including usage, inputs, and examples

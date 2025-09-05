@@ -1,0 +1,51 @@
+name: superlinter
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: "GitHub runner to use"
+        required: false
+        default: "ubuntu-latest"
+        type: string
+      sl_version:
+        description: "github/super-linter version ref"
+        required: false
+        default: "slim-v8"
+        type: string
+      # Free-form env to pass straight to Super-Linter (KEY=VALUE, one per line)
+      # https://thedocumentation.org/super-linter/usage/configuration
+      sl_env:
+        description: "Extra Super-Linter env (lines of KEY=VALUE). Example: 'VALIDATE_MARKDOWN=false'"
+        required: false
+        default: ""
+        type: string
+    secrets:
+      token:
+        required: false
+
+jobs:
+  superlinter:
+    name: Super-Linter
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Convert the multi-line sl_env into environment variables
+      - name: Apply custom Super-Linter env
+        shell: bash
+        run: |
+          while IFS= read -r line; do
+            [[ -z "$line" || "$line" =~ ^\s*# ]] && continue
+            echo "$line" >> "$GITHUB_ENV"
+          done <<< "${{ inputs.sl_env }}"
+
+      - name: Run Super-Linter
+        uses: github/super-linter@${{ inputs.sl_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.token || github.token }}
+          # Any values written to $GITHUB_ENV above are also inherited here
